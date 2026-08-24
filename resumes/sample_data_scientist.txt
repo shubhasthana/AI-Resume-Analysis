@@ -1,0 +1,35 @@
+PRIYA SHARMA
+Email: priya.sharma@example.com | Phone: (555) 789-4321
+LinkedIn: linkedin.com/in/priya-sharma-ds | GitHub: github.com/priyasharma-ml
+
+PROFESSIONAL SUMMARY
+Results-oriented Data Scientist with expertise in Machine Learning, Natural Language Processing (NLP), Deep Learning, and predictive modeling. Proficient in Python, PyTorch, Scikit-Learn, Pandas, NumPy, and SQL. Spearheaded ML solutions that boosted customer retention by 28%.
+
+TECHNICAL SKILLS
+- Machine Learning: Supervised Learning, Unsupervised Learning, Random Forest, XGBoost, LightGBM, Clustering
+- Deep Learning and NLP: PyTorch, TensorFlow, Transformers, BERT, LLMs, Hugging Face, OpenCV
+- Data Science Tools: Python, R, Pandas, NumPy, SciPy, Matplotlib, Seaborn, Jupyter
+- Databases and Big Data: SQL, PostgreSQL, Snowflake, Apache Spark
+- MLOps and Deployment: Docker, FastAPI, MLflow, AWS, Git
+
+WORK EXPERIENCE
+Lead Data Scientist | DataSphere Analytics
+March 2021 - Present
+- Developed predictive churn models using XGBoost and PyTorch, increasing customer retention by 28%.
+- Designed end-to-end NLP sentiment classification pipeline using BERT and Hugging Face on 500,000+ customer reviews.
+- Deployed ML inference microservices with FastAPI and Docker on AWS, reducing latency to <45ms.
+- Collaborated with business stakeholders to translate analytical findings into strategic executive dashboards.
+
+Data Analyst | Insight Metrics Corp
+January 2019 - February 2021
+- Built automated SQL queries and ETL pipelines in Snowflake, reducing weekly reporting time by 15 hours.
+- Created executive Tableau dashboards to track multi-channel marketing campaigns and ROI metrics.
+
+KEY PROJECTS
+- Clinical Text Summarization with Transformers (PyTorch, Hugging Face, Streamlit, Python)
+- Real-Time Credit Card Fraud Detection (Scikit-Learn, LightGBM, Kafka, Docker)
+
+EDUCATION
+Master of Science in Data Science and Machine Learning
+University of Engineering and Tech | 2017 - 2019
+Bachelor of Science in Mathematics and Statistics | 2013 - 2017

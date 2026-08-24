@@ -1,0 +1,39 @@
+ALEXANDER RIVERS
+Email: alex.rivers@example.com | Phone: (555) 019-2834
+LinkedIn: linkedin.com/in/alex-rivers-dev | GitHub: github.com/alexrivers-code
+
+PROFESSIONAL SUMMARY
+Dynamic Python Backend Developer with 3+ years of experience building high-throughput microservices, RESTful APIs, and database architectures using Python, Django, FastAPI, PostgreSQL, and Docker. Proven track record of improving system latency by 35% and automating CI/CD deployments.
+
+TECHNICAL SKILLS
+- Programming Languages: Python, JavaScript, TypeScript, SQL, Bash
+- Web Frameworks: Django, FastAPI, Flask, REST API, WebSockets
+- Databases: PostgreSQL, MySQL, Redis, MongoDB
+- Cloud and DevOps: Docker, AWS, CI/CD, Git, GitHub Actions, Linux
+- Testing and Tools: PyTest, Postman, Celery, Jira, Agile, Scrum
+
+WORK EXPERIENCE
+Python Developer | TechCorp Solutions
+July 2022 - Present
+- Architected scalable REST APIs using FastAPI and PostgreSQL, serving 120,000+ daily active users.
+- Reduced database query response times by 42% through query optimization and Redis caching layers.
+- Built automated CI/CD deployment pipelines using GitHub Actions and Docker, reducing release cycle time by 50%.
+- Integrated Stripe payment gateways and third-party webhooks with Celery asynchronous task queues.
+
+Junior Software Engineer | CloudNova Inc.
+August 2020 - June 2022
+- Developed backend modules in Django and Flask for enterprise inventory management systems.
+- Wrote comprehensive unit tests using PyTest, achieving 94% test code coverage across 15 core services.
+- Collaborated in an Agile Scrum environment with cross-functional teams of engineers and product managers.
+
+KEY PROJECTS
+- Distributed E-Commerce Microservices Engine (Python, FastAPI, Redis, Docker, PostgreSQL)
+- Intelligent Log Aggregator and Alerting System (Python, Elasticsearch, Docker, AWS)
+
+EDUCATION
+Bachelor of Technology in Computer Science and Engineering
+State University of Technology | 2016 - 2020 | GPA: 3.8 / 4.0
+
+CERTIFICATIONS
+- AWS Certified Solutions Architect - Associate
+- Professional Python Programmer Certification
