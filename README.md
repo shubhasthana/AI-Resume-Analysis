@@ -40,6 +40,10 @@ An AI-powered Resume Analyzer and ATS Optimization web application built with **
 
 The app opens with a dark, glassmorphic 3D authentication portal and continues into an interactive resume analysis workspace with ATS scoring, skill matching, OCR extraction, recommendations, and visual analytics.
 
+### 🌐 Live website
+
+Try the deployed application here: [AI Resume Analyzer 3D](https://ai-resume-analysis-app-zdsge0.streamlit.app/)
+
 ![AI Resume Analyzer 3D login screen preview](docs/preview.svg)
 
 Run the app locally to explore the complete experience:
