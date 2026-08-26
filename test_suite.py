@@ -76,6 +76,31 @@ class TestAuthManager(unittest.TestCase):
         scans = AuthManager.increment_user_scans(test_username)
         self.assertGreaterEqual(scans, 1)
 
+    def test_password_reset_flow(self):
+        import time
+        uid = str(int(time.time() * 1000))
+        test_username = f"reset_user_{uid}"
+        test_email = f"reset_user_{uid}@example.com"
+        test_pwd = "SecurePassword123!"
+        new_pwd = "NewPassword456!"
+
+        success, _ = AuthManager.register_user(
+            username=test_username,
+            email=test_email,
+            password=test_pwd,
+            full_name="Reset User",
+            target_role="Developer"
+        )
+        self.assertTrue(success)
+
+        success, msg = AuthManager.reset_password(test_username, new_pwd)
+        self.assertTrue(success)
+
+        success, _, profile = AuthManager.authenticate_user(test_username, new_pwd)
+        self.assertTrue(success)
+        self.assertEqual(profile["username"], test_username)
+        self.assertIn("Reset User", profile["full_name"])
+
 
 class TestTextProcessing(unittest.TestCase):
     """Tests text processing and NLP extraction utilities."""

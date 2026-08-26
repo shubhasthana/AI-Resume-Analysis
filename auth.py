@@ -215,6 +215,43 @@ class AuthManager:
         return True, f"Account created successfully for {username}! You can now log in."
 
     @classmethod
+    def reset_password(
+        cls,
+        username_or_email: str,
+        new_password: str
+    ) -> Tuple[bool, str]:
+        """Resets a user's password without requiring a secret question."""
+        identifier = (username_or_email or "").strip().lower()
+        if not identifier:
+            return False, "Please enter your username or email."
+        if not new_password or len(new_password) < 8:
+            return False, "Password must be at least 8 characters long."
+
+        users = cls._load_users()
+        user_record = None
+
+        if identifier in users:
+            user_record = users[identifier]
+        else:
+            for u in users.values():
+                if u.get("email") == identifier:
+                    user_record = u
+                    break
+
+        if not user_record:
+            return False, "No account found for that username or email."
+
+        new_hash, new_salt = cls._hash_password(new_password)
+        user_record["password_hash"] = new_hash
+        user_record["salt"] = new_salt
+        user_record["password_scheme"] = "pbkdf2_sha256"
+        user_record["login_attempts"] = 0
+        user_record["lockout_until"] = 0
+        users[user_record["username"]] = user_record
+        cls._save_users(users)
+        return True, "Password reset successful. You can now sign in with your new password."
+
+    @classmethod
     def authenticate_user(
         cls,
         username_or_email: str,

@@ -365,29 +365,53 @@ if not st.session_state.authenticated:
         with login_tab:
             st.markdown("#### Welcome Back")
             st.caption("Enter your credentials to access your AI resume workspace.")
-            
-            with st.form("login_form"):
-                login_identifier = st.text_input("Username or Email", placeholder="e.g. alexrivers or alex@example.com")
-                login_password = st.text_input("Password", type="password", placeholder="Enter your password")
-                remember_me = st.checkbox("Keep me signed in on this device", value=False)
-                submit_login = st.form_submit_button("Sign In to Workspace", use_container_width=True)
 
-            if submit_login:
-                success, msg, profile = AuthManager.authenticate_user(login_identifier, login_password)
-                if success and profile:
-                    st.session_state.authenticated = True
-                    st.session_state.current_user = profile
-                    st.session_state.remember_me = remember_me
-                    if remember_me:
-                        cookies.set(
-                            "resume_auth_token",
-                            AuthManager.create_session(profile["username"]),
-                            max_age=30 * 24 * 60 * 60,
-                        )
-                    st.toast(f"Welcome back, {profile['full_name']}!", icon="👋")
-                    st.rerun()
-                else:
-                    st.error(f"❌ {msg}")
+            if "show_forgot_password" not in st.session_state:
+                st.session_state.show_forgot_password = False
+
+            if st.button("Forgot password?", use_container_width=True, key="forgot_password_toggle"):
+                st.session_state.show_forgot_password = not st.session_state.show_forgot_password
+
+            if st.session_state.show_forgot_password:
+                with st.form("forgot_password_form"):
+                    reset_identifier = st.text_input("Username or Email", key="reset_identifier", placeholder="Enter your username or email")
+                    reset_password = st.text_input("New Password", type="password", key="reset_password", placeholder="Create a new password")
+                    reset_confirm_password = st.text_input("Confirm New Password", type="password", key="reset_confirm_password", placeholder="Confirm your new password")
+                    submit_reset = st.form_submit_button("Reset Password", use_container_width=True)
+
+                if submit_reset:
+                    if reset_password != reset_confirm_password:
+                        st.error("❌ New password and confirmation do not match.")
+                    else:
+                        success, msg = AuthManager.reset_password(reset_identifier, reset_password)
+                        if success:
+                            st.session_state.show_forgot_password = False
+                            st.success(f"✅ {msg}")
+                        else:
+                            st.error(f"❌ {msg}")
+            else:
+                with st.form("login_form"):
+                    login_identifier = st.text_input("Username or Email", placeholder="e.g. alexrivers or alex@example.com")
+                    login_password = st.text_input("Password", type="password", placeholder="Enter your password")
+                    remember_me = st.checkbox("Keep me signed in on this device", value=False)
+                    submit_login = st.form_submit_button("Sign In to Workspace", use_container_width=True)
+
+                if submit_login:
+                    success, msg, profile = AuthManager.authenticate_user(login_identifier, login_password)
+                    if success and profile:
+                        st.session_state.authenticated = True
+                        st.session_state.current_user = profile
+                        st.session_state.remember_me = remember_me
+                        if remember_me:
+                            cookies.set(
+                                "resume_auth_token",
+                                AuthManager.create_session(profile["username"]),
+                                max_age=30 * 24 * 60 * 60,
+                            )
+                        st.toast(f"Welcome back, {profile['full_name']}!", icon="👋")
+                        st.rerun()
+                    else:
+                        st.error(f"❌ {msg}")
 
         # TAB: Create Account
         with register_tab:
