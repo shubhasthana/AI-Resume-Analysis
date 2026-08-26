@@ -1,4 +1,5 @@
 streamlit>=1.30.0
+streamlit-google-analytics-tag
 streamlit-cookies-controller>=0.0.4
 pandas>=2.0.0
 scikit-learn>=1.3.0

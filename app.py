@@ -9,6 +9,7 @@ import io
 import json
 import textwrap
 import streamlit as st
+from streamlit_gtag import st_gtag
 from streamlit_cookies_controller import CookieController
 import pandas as pd
 import numpy as np
@@ -46,6 +47,11 @@ st.set_page_config(
     page_icon="🌌",
     layout="wide",
     initial_sidebar_state="expanded"
+)
+
+st_gtag(
+    gtag_id="G-B0C7MB405R",
+    config={"send_page_view": True}
 )
 
 # Custom Dark Glassmorphic & 3D CSS Theme
