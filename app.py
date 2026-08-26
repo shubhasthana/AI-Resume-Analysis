@@ -49,6 +49,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+st.html('<meta name="google-site-verification" content="sn0CwohP7bTI6rdlMC_jG3RB407lAbxDHBiV5Jwa-Qs" />')
+
 st_gtag(
     gtag_id="G-B0C7MB405R",
     config={"send_page_view": True}
