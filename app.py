@@ -56,6 +56,22 @@ st_gtag(
     config={"send_page_view": True}
 )
 
+# Inject Google Tag directly
+components.html(
+        """
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-B0C7MB405R"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-B0C7MB405R');
+        </script>
+        """,
+        height=0,
+)
+
 # Custom Dark Glassmorphic & 3D CSS Theme
 CUSTOM_CSS = """
 <style>
