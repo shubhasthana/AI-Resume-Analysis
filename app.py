@@ -9,7 +9,6 @@ import io
 import json
 import textwrap
 import streamlit as st
-from streamlit_gtag import st_gtag
 from streamlit_cookies_controller import CookieController
 import pandas as pd
 import numpy as np
@@ -49,27 +48,35 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.html('<meta name="google-site-verification" content="sn0CwohP7bTI6rdlMC_jG3RB407lAbxDHBiV5Jwa-Qs" />')
-
-st_gtag(
-    gtag_id="G-B0C7MB405R",
-    config={"send_page_view": True}
-)
-
-# Inject Google Tag directly
+# Inject Meta Tag & Google Analytics directly into the top parent window <head>
 components.html(
-        """
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-B0C7MB405R"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+    """
+    <script>
+        const head = window.parent.document.getElementsByTagName('head')[0];
 
+        // Add Google Search Console Verification Meta Tag
+        if (!window.parent.document.querySelector('meta[name="google-site-verification"]')) {
+            const meta = window.parent.document.createElement('meta');
+            meta.name = 'google-site-verification';
+            meta.content = 'sn0CwohP7bTI6rdlMC_jG3RB407lAbxDHBiV5Jwa-Qs';
+            head.appendChild(meta);
+        }
+
+        // Add Google Analytics Script
+        if (!window.parent.document.querySelector('script[src*="googletagmanager"]')) {
+            const script = window.parent.document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-B0C7MB405R';
+            head.appendChild(script);
+
+            window.parent.dataLayer = window.parent.dataLayer || [];
+            function gtag(){window.parent.dataLayer.push(arguments);}
+            gtag('js', new Date());
             gtag('config', 'G-B0C7MB405R');
-        </script>
-        """,
-        height=0,
+        }
+    </script>
+    """,
+    height=0,
 )
 
 # Custom Dark Glassmorphic & 3D CSS Theme
