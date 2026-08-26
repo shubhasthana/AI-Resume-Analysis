@@ -24,6 +24,7 @@ from skill_match import SkillMatcher, SKILL_TAXONOMY
 from ats_score import ATSScoreCalculator
 from model import get_classifier, ResumeClassifier, SAMPLE_RESUME_DATA
 from recommendations import RecommendationEngine
+from resume_generator import build_ai_resume_draft, build_ai_resume_pdf
 from utils.text_processing import (
     clean_text,
     extract_keywords,
@@ -605,6 +606,7 @@ if app_mode == "🚀 Resume Analyzer":
 
                 # 4. Recommendation Engine
                 rec_data = RecommendationEngine.generate_recommendations(ats_data, resume_parsed)
+                ai_resume_draft = build_ai_resume_draft(resume_raw_text, jd_input)
 
                 st.session_state.analysis_results = {
                     "resume_parsed": resume_parsed,
@@ -613,7 +615,8 @@ if app_mode == "🚀 Resume Analyzer":
                     "rec_data": rec_data,
                     "jd_text": jd_input,
                     "resume_text": resume_raw_text,
-                    "source_name": resume_source_name
+                    "source_name": resume_source_name,
+                    "ai_resume_draft": ai_resume_draft
                 }
                 st.session_state.analysis_complete = True
                 st.toast("Analysis Complete!", icon="✨")
@@ -788,6 +791,20 @@ if app_mode == "🚀 Resume Analyzer":
             """, unsafe_allow_html=True)
 
         st.info(rec["ethical_note"])
+
+        ai_resume_draft = res.get("ai_resume_draft") or build_ai_resume_draft(res["resume_text"], res["jd_text"])
+
+        if ai_resume_draft:
+            ai_resume_pdf = build_ai_resume_pdf(res["resume_text"], res["jd_text"])
+            with st.expander("📝 AI-Generated Resume Draft", expanded=False):
+                st.text_area("Optimized resume draft", ai_resume_draft, height=260, disabled=True)
+                st.download_button(
+                    label="📄 Download AI Resume Draft (.pdf)",
+                    data=ai_resume_pdf,
+                    file_name=f"AI_Resume_Draft_{current_user['username']}.pdf",
+                    mime="application/pdf",
+                    use_container_width=True
+                )
 
         # DOWNLOAD REPORT
         st.markdown("<br>", unsafe_allow_html=True)

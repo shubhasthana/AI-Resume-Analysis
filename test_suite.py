@@ -31,6 +31,7 @@ from skill_match import SkillExtractor, SkillMatcher
 from ats_score import ATSScoreCalculator
 from model import ResumeClassifier, get_classifier
 from recommendations import RecommendationEngine
+from resume_generator import build_ai_resume_draft, build_ai_resume_pdf
 from utils.visuals_3d import (
     get_3d_hero_header_html,
     get_3d_score_orb_html,
@@ -253,6 +254,56 @@ class TestMLModel(unittest.TestCase):
         pred = clf.predict_category(text)
         self.assertIn(pred["predicted_category"], ["Data Science", "Machine Learning Engineer"])
         self.assertGreater(pred["confidence_score"], 0.0)
+
+
+class TestAIGeneratedResume(unittest.TestCase):
+    """Tests the AI-generated resume export draft."""
+
+    def test_build_ai_resume_draft_includes_contact_and_key_sections(self):
+        resume_text = """
+        Alexander Rivers
+        alex@example.com | +1 (555) 019-2834 | github.com/alex
+
+        Summary:
+        Backend Python developer with Django, FastAPI, PostgreSQL, and Docker experience.
+
+        Technical Skills:
+        Python, Django, FastAPI, PostgreSQL, Docker, Git
+
+        Experience:
+        Python Developer | TechCorp | 2022-Present
+        Built APIs and improved performance by 35%.
+
+        Education:
+        B.Tech in Computer Science
+        """
+        jd_text = "Looking for a Python Developer with Django, FastAPI, and PostgreSQL."
+
+        draft = build_ai_resume_draft(resume_text, jd_text)
+
+        self.assertIn("Alexander Rivers", draft)
+        self.assertIn("PROFESSIONAL SUMMARY", draft)
+        self.assertIn("TECHNICAL SKILLS", draft)
+        self.assertIn("Django", draft)
+        self.assertIn("FastAPI", draft)
+        self.assertIn("Python Developer", draft)
+
+    def test_build_ai_resume_pdf_returns_pdf_bytes(self):
+        resume_text = """
+        Alexander Rivers
+        alex@example.com
+
+        Summary:
+        Backend Python developer.
+
+        Technical Skills:
+        Python, Django, SQL
+        """
+        jd_text = "Looking for a Python Developer with Django and SQL."
+
+        pdf_bytes = build_ai_resume_pdf(resume_text, jd_text)
+
+        self.assertTrue(pdf_bytes.startswith(b"%PDF"))
 
 
 class TestRecommendations(unittest.TestCase):
