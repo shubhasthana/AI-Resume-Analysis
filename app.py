@@ -9,6 +9,7 @@ import io
 import json
 import textwrap
 import streamlit as st
+from streamlit_cookies_controller import CookieController
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -300,6 +301,17 @@ if "analysis_complete" not in st.session_state:
     st.session_state.analysis_complete = False
 if "analysis_results" not in st.session_state:
     st.session_state.analysis_results = None
+if "remember_me" not in st.session_state:
+    st.session_state.remember_me = False
+
+cookies = CookieController(key="auth_cookies")
+if not st.session_state.authenticated:
+    saved_token = cookies.get("resume_auth_token")
+    saved_profile = AuthManager.get_session_profile(saved_token)
+    if saved_profile:
+        st.session_state.authenticated = True
+        st.session_state.current_user = saved_profile
+        st.session_state.remember_me = True
 
 classifier = get_classifier()
 
@@ -325,6 +337,7 @@ if not st.session_state.authenticated:
             with st.form("login_form"):
                 login_identifier = st.text_input("Username or Email", placeholder="e.g. alexrivers or alex@example.com")
                 login_password = st.text_input("Password", type="password", placeholder="Enter your password")
+                remember_me = st.checkbox("Keep me signed in on this device", value=False)
                 submit_login = st.form_submit_button("Sign In to Workspace", use_container_width=True)
 
             if submit_login:
@@ -332,6 +345,13 @@ if not st.session_state.authenticated:
                 if success and profile:
                     st.session_state.authenticated = True
                     st.session_state.current_user = profile
+                    st.session_state.remember_me = remember_me
+                    if remember_me:
+                        cookies.set(
+                            "resume_auth_token",
+                            AuthManager.create_session(profile["username"]),
+                            max_age=30 * 24 * 60 * 60,
+                        )
                     st.toast(f"Welcome back, {profile['full_name']}!", icon="👋")
                     st.rerun()
                 else:
@@ -372,8 +392,20 @@ if not st.session_state.authenticated:
                     target_role=reg_role
                 )
                 if success:
-                    st.success(f"✅ {msg}")
-                    st.info("You can now switch to the 'Sign In' tab to log in with your new credentials.")
+                    success, _, profile = AuthManager.authenticate_user(reg_username, reg_password)
+                    if success and profile:
+                        st.session_state.authenticated = True
+                        st.session_state.current_user = profile
+                        st.session_state.remember_me = True
+                        cookies.set(
+                            "resume_auth_token",
+                            AuthManager.create_session(profile["username"]),
+                            max_age=30 * 24 * 60 * 60,
+                        )
+                        st.toast(f"Welcome, {profile['full_name']}!", icon="👋")
+                        st.rerun()
+                    else:
+                        st.error("Account created, but automatic sign-in failed. Please sign in manually.")
                 else:
                     st.error(f"❌ {msg}")
 
@@ -410,6 +442,8 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     if st.button("🔒 Sign Out", use_container_width=True):
+        AuthManager.revoke_session(cookies.get("resume_auth_token"))
+        cookies.remove("resume_auth_token")
         st.session_state.authenticated = False
         st.session_state.current_user = None
         st.session_state.analysis_complete = False

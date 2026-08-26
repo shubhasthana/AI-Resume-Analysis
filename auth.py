@@ -13,11 +13,13 @@ from datetime import datetime
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 USERS_FILE = os.path.join(DATA_DIR, "users.json")
+SESSIONS_FILE = os.path.join(DATA_DIR, "sessions.json")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 MAX_LOGIN_ATTEMPTS = 5
 LOCKOUT_SECONDS = 15 * 60
 PASSWORD_ITERATIONS = 200_000
+SESSION_DAYS = 30
 
 
 class AuthManager:
@@ -83,6 +85,83 @@ class AuthManager:
             os.chmod(USERS_FILE, 0o600)
         except OSError:
             pass
+
+    @staticmethod
+    def _profile(user_record: Dict[str, Any]) -> Dict[str, Any]:
+        """Return only fields that are safe to place in Streamlit session state."""
+        return {
+            "username": user_record["username"],
+            "email": user_record["email"],
+            "full_name": user_record.get("full_name", user_record["username"]),
+            "created_at": user_record.get("created_at", ""),
+            "scans_count": user_record.get("scans_count", 0),
+            "target_role": user_record.get("target_role", "Software Engineer")
+        }
+
+    @classmethod
+    def _load_sessions(cls) -> Dict[str, Any]:
+        """Load server-side remember-me sessions."""
+        if not os.path.exists(SESSIONS_FILE):
+            return {}
+        try:
+            with open(SESSIONS_FILE, "r", encoding="utf-8") as f:
+                sessions = json.load(f)
+            return sessions if isinstance(sessions, dict) else {}
+        except (OSError, json.JSONDecodeError):
+            return {}
+
+    @classmethod
+    def _save_sessions(cls, sessions: Dict[str, Any]) -> None:
+        """Persist only hashed session tokens, never the browser token itself."""
+        with open(SESSIONS_FILE, "w", encoding="utf-8") as f:
+            json.dump(sessions, f, indent=2)
+        try:
+            os.chmod(SESSIONS_FILE, 0o600)
+        except OSError:
+            pass
+
+    @staticmethod
+    def _session_key(token: str) -> str:
+        return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+    @classmethod
+    def create_session(cls, username: str) -> str:
+        """Create a long-lived opaque token for the optional remember-me cookie."""
+        token = secrets.token_urlsafe(32)
+        sessions = cls._load_sessions()
+        now = time.time()
+        sessions = {
+            key: value for key, value in sessions.items()
+            if float(value.get("expires_at", 0)) > now
+        }
+        sessions[cls._session_key(token)] = {
+            "username": username,
+            "expires_at": now + (SESSION_DAYS * 24 * 60 * 60),
+        }
+        cls._save_sessions(sessions)
+        return token
+
+    @classmethod
+    def get_session_profile(cls, token: str) -> Optional[Dict[str, Any]]:
+        """Validate a remember-me token and return its current user profile."""
+        if not token:
+            return None
+        sessions = cls._load_sessions()
+        session = sessions.get(cls._session_key(token))
+        if not session or float(session.get("expires_at", 0)) <= time.time():
+            return None
+        users = cls._load_users()
+        user_record = users.get(session.get("username"))
+        return cls._profile(user_record) if user_record else None
+
+    @classmethod
+    def revoke_session(cls, token: str) -> None:
+        """Revoke a remember-me token on sign out."""
+        if not token:
+            return
+        sessions = cls._load_sessions()
+        sessions.pop(cls._session_key(token), None)
+        cls._save_sessions(sessions)
 
     @classmethod
     def register_user(
@@ -205,15 +284,7 @@ class AuthManager:
         users[username_key] = user_record
         cls._save_users(users)
 
-        profile = {
-            "username": user_record["username"],
-            "email": user_record["email"],
-            "full_name": user_record.get("full_name", user_record["username"]),
-            "created_at": user_record.get("created_at", ""),
-            "scans_count": user_record.get("scans_count", 0),
-            "target_role": user_record.get("target_role", "Software Engineer")
-        }
-        return True, "Login successful!", profile
+        return True, "Login successful!", cls._profile(user_record)
 
     @classmethod
     def increment_user_scans(cls, username: str) -> int:

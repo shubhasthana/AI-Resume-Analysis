@@ -36,6 +36,20 @@ An AI-powered Resume Analyzer and ATS Optimization web application built with **
 
 ---
 
+## 👀 What the website looks like
+
+The app opens with a dark, glassmorphic 3D authentication portal and continues into an interactive resume analysis workspace with ATS scoring, skill matching, OCR extraction, recommendations, and visual analytics.
+
+![AI Resume Analyzer 3D login screen preview](docs/preview.svg)
+
+Run the app locally to explore the complete experience:
+
+```bash
+streamlit run app.py
+```
+
+---
+
 ## 🏗️ Project Architecture
 
 ```

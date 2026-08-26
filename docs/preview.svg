@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 860" role="img" aria-labelledby="title desc">
+  <title id="title">AI Resume Analyzer 3D login screen preview</title>
+  <desc id="desc">Dark glassmorphic authentication screen with neon teal and blue accents.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05070e"/>
+      <stop offset="0.55" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#11102a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00f5d4"/>
+      <stop offset="0.55" stop-color="#00bbf9"/>
+      <stop offset="1" stop-color="#7b2cbf"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="18" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1440" height="860" fill="url(#bg)"/>
+  <circle cx="180" cy="180" r="150" fill="#00f5d4" opacity="0.08" filter="url(#glow)"/>
+  <circle cx="1270" cy="650" r="220" fill="#7b2cbf" opacity="0.10" filter="url(#glow)"/>
+  <rect x="0" y="0" width="1440" height="72" fill="#080b15"/>
+  <text x="1330" y="45" fill="#d8dee9" font-family="Montserrat, Arial, sans-serif" font-size="20">Deploy</text>
+  <rect x="100" y="145" width="1240" height="470" rx="24" fill="#080d18" stroke="#00f5d4" stroke-opacity="0.48"/>
+  <rect x="120" y="165" width="1200" height="430" rx="18" fill="#0a101d" stroke="#ffffff" stroke-opacity="0.05"/>
+  <rect x="525" y="285" width="390" height="40" rx="20" fill="#00f5d4" fill-opacity="0.10" stroke="#00f5d4" stroke-opacity="0.65"/>
+  <circle cx="552" cy="305" r="7" fill="#00f5d4"/>
+  <text x="570" y="313" fill="#00f5d4" font-family="Montserrat, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="4">SECURE AUTHENTICATION PORTAL</text>
+  <text x="720" y="405" text-anchor="middle" fill="#f4fbff" font-family="Montserrat, Arial, sans-serif" font-size="57" font-weight="900" letter-spacing="2">AI RESUME <tspan fill="#00f5d4">ANALYZER</tspan> <tspan fill="#7b8cff">3D</tspan></text>
+  <text x="720" y="450" text-anchor="middle" fill="#9aa5b8" font-family="Inter, Arial, sans-serif" font-size="20">3D ATS compatibility, ML classification, and skill constellations.</text>
+  <rect x="438" y="690" width="270" height="60" rx="12" fill="#00f5d4" fill-opacity="0.16" stroke="#00f5d4" stroke-opacity="0.7"/>
+  <text x="573" y="728" text-anchor="middle" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Sign in</text>
+  <rect x="732" y="690" width="270" height="60" rx="12" fill="#10182a" stroke="#ffffff" stroke-opacity="0.15"/>
+  <text x="867" y="728" text-anchor="middle" fill="#dce4ef" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Create account</text>
+</svg>
